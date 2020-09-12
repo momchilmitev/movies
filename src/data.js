@@ -1,3 +1,5 @@
+import { showLoading, hideLoading } from './notification.js';
+
 const appId = '5B384662-46D4-8185-FFB6-F6C6F22D9A00';
 const restId = '45B450F3-02EC-4B59-B501-D264577DC88C';
 
@@ -15,8 +17,9 @@ const endPoints = {
 
 export async function register(username, password) {
 	const url = generateURL(endPoints.REGISTER);
+	showLoading();
 
-	return (
+	const result = (
 		await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -28,10 +31,16 @@ export async function register(username, password) {
 			}),
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 export async function login(username, password) {
 	const url = generateURL(endPoints.LOGIN);
+
+	showLoading();
 
 	const result = await (
 		await fetch(url, {
@@ -50,6 +59,8 @@ export async function login(username, password) {
 	localStorage.setItem('username', result.username);
 	localStorage.setItem('userId', result.objectId);
 
+	hideLoading();
+
 	return result;
 }
 
@@ -57,15 +68,21 @@ export async function logout() {
 	const url = generateURL(endPoints.LOGOUT);
 	const token = localStorage.getItem('userToken');
 
+	showLoading();
+
 	localStorage.removeItem('userToken');
 	localStorage.removeItem('username');
 	localStorage.removeItem('userId');
 
-	return await fetch(url, {
+	const result = await fetch(url, {
 		headers: {
 			'user-token': token,
 		},
 	});
+
+	hideLoading();
+
+	return result;
 }
 
 // get all movies
@@ -73,13 +90,19 @@ export async function getMovies() {
 	const url = generateURL(endPoints.MOVIES);
 	const token = localStorage.getItem('userToken');
 
-	return (
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			headers: {
 				'user-token': token,
 			},
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // get movie by id
@@ -87,13 +110,19 @@ export async function getMovieById(id) {
 	const url = generateURL(endPoints.MOVIE_BY_ID) + id;
 	const token = localStorage.getItem('userToken');
 
-	return (
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			headers: {
 				'user-token': token,
 			},
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // get movies by userId
@@ -101,13 +130,20 @@ export async function getMoviesByOwner(ownerId) {
 	const url =
 		generateURL(endPoints.MOVIES) + `?where=ownerId%3D%27${ownerId}%27`;
 	const token = localStorage.getItem('userToken');
-	return (
+
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			headers: {
 				'user-token': token,
 			},
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // create movie
@@ -115,7 +151,9 @@ export async function createMovie(movie) {
 	const url = generateURL(endPoints.MOVIES);
 	const token = localStorage.getItem('userToken');
 
-	return (
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -125,6 +163,10 @@ export async function createMovie(movie) {
 			body: JSON.stringify(movie),
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // edit movie
@@ -132,7 +174,9 @@ export async function updateMovie(id, updatedProps) {
 	const url = generateURL(endPoints.MOVIE_BY_ID) + id;
 	const token = localStorage.getItem('userToken');
 
-	return (
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			method: 'PUT',
 			headers: {
@@ -142,6 +186,10 @@ export async function updateMovie(id, updatedProps) {
 			body: JSON.stringify(updatedProps),
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // delete movie
@@ -149,7 +197,9 @@ export async function deleteMovie(id) {
 	const url = generateURL(endPoints.MOVIE_BY_ID) + id;
 	const token = localStorage.getItem('userToken');
 
-	return (
+	showLoading();
+
+	const result = (
 		await fetch(url, {
 			method: 'DELETE',
 			headers: {
@@ -158,6 +208,10 @@ export async function deleteMovie(id) {
 			},
 		})
 	).json();
+
+	hideLoading();
+
+	return result;
 }
 
 // buy ticket

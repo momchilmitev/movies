@@ -1,4 +1,5 @@
 import { logout as logoutUser } from '../data.js';
+import { showInfo, showError } from '../notification.js';
 
 export default async function logout() {
 	try {
@@ -12,9 +13,12 @@ export default async function logout() {
 
 		this.app.userData.username = '';
 		this.app.userData.userId = '';
+
+		showInfo('Successfully logged out!');
+
 		this.redirect('#/home');
 	} catch (e) {
 		console.log(e);
-		alert(e.message);
+		showError(e.message);
 	}
 }

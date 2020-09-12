@@ -1,4 +1,5 @@
 import { register as registerUser } from '../data.js';
+import { showInfo, showError } from '../notification.js';
 
 export default async function register() {
 	this.partials = {
@@ -36,9 +37,11 @@ export async function registerPost() {
 			Object.assign(error, result);
 			throw error;
 		}
+
+		showInfo('Successfully registered!');
 		this.redirect('#/login');
 	} catch (e) {
 		console.log(e);
-		alert(e.message);
+		showError(e.message);
 	}
 }
