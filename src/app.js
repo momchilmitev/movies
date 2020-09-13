@@ -6,6 +6,7 @@ import catalog, {
 	create,
 	createPost,
 	edit,
+	editPost,
 	details,
 	buyMovieTicket,
 	getMyMovies,
@@ -43,6 +44,10 @@ window.addEventListener('load', () => {
 		});
 
 		this.get('#/edit/:id', edit);
+		this.post('#/edit/:id', (ctx) => {
+			editPost.call(ctx);
+		});
+
 		this.get('#/details/:id', details);
 
 		this.get('#/buy/:id', buyMovieTicket);
