@@ -16,8 +16,12 @@ export default async function catalog() {
 
 	const movies = await getMovies();
 	this.app.userData.movies = movies;
+	const context = Object.assign(
+		{ origin: encodeURIComponent('#/catalog') },
+		this.app.userData
+	);
 
-	this.partial('../templates/movie/catalog.hbs', this.app.userData);
+	this.partial('../templates/movie/catalog.hbs', context);
 }
 
 export async function create() {
@@ -59,12 +63,19 @@ export async function createPost() {
 }
 
 export async function details() {
+	const movieId = this.params.id;
+	const movie = await getMovieById(movieId);
 	this.partials = {
 		header: await this.load('../templates/common/header.hbs'),
 		footer: await this.load('../templates/common/footer.hbs'),
 	};
 
-	this.partial('../templates/movie/details.hbs', this.app.userData);
+	const context = Object.assign(
+		{ movie, origin: encodeURIComponent('#/details/' + movieId) },
+		this.app.userData
+	);
+
+	this.partial('../templates/movie/details.hbs', context);
 }
 
 export async function edit() {
@@ -90,7 +101,7 @@ export async function buyMovieTicket() {
 		}
 
 		showInfo(`You bought ticket for ${movie.title}!`);
-		this.redirect('#/catalog');
+		this.redirect(this.params.origin);
 	} catch (e) {
 		console.log(e);
 		showError(e.message);
@@ -107,7 +118,10 @@ export async function getMyMovies() {
 
 	const movies = await getMoviesByOwner();
 	this.app.userData.movies = movies;
-	const context = Object.assign({ myMovies: true }, this.app.userData);
+	const context = Object.assign(
+		{ myMovies: true, origin: encodeURIComponent('#/my_movies') },
+		this.app.userData
+	);
 
 	this.partial('../templates/movie/catalog.hbs', context);
 }
