@@ -6,6 +6,7 @@ import {
 	getMovieById,
 	getMoviesByOwner,
 	updateMovie,
+	deleteMovie,
 } from '../data.js';
 
 export default async function catalog() {
@@ -161,4 +162,28 @@ export async function getMyMovies() {
 	);
 
 	this.partial('../templates/movie/catalog.hbs', context);
+}
+
+export async function removeMovie() {
+	if (confirm('Are you sure?') === false) {
+		return this.redirect('#/my_movies');
+	}
+
+	const movieId = this.params.id;
+
+	try {
+		const result = await deleteMovie(movieId);
+
+		if (result.hasOwnProperty('errorData')) {
+			const error = new Error();
+			Object.assign(error, result);
+			throw error;
+		}
+
+		showInfo('Movie deleted!');
+		this.redirect('#/my_movies');
+	} catch (e) {
+		console.log(e);
+		showError(e.message);
+	}
 }

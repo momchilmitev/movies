@@ -10,6 +10,7 @@ import catalog, {
 	details,
 	buyMovieTicket,
 	getMyMovies,
+	removeMovie,
 } from './controllers/movies.js';
 
 window.addEventListener('load', () => {
@@ -36,6 +37,7 @@ window.addEventListener('load', () => {
 		});
 
 		this.get('#/logout', logout);
+
 		this.get('#/catalog', catalog);
 
 		this.get('#/create', create);
@@ -53,6 +55,8 @@ window.addEventListener('load', () => {
 		this.get('#/buy/:id', buyMovieTicket);
 
 		this.get('#/my_movies', getMyMovies);
+
+		this.get('#/delete/:id', removeMovie);
 	});
 
 	app.run();
