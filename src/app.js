@@ -8,6 +8,7 @@ import catalog, {
 	edit,
 	details,
 	buyMovieTicket,
+	getMyMovies,
 } from './controllers/movies.js';
 
 window.addEventListener('load', () => {
@@ -45,6 +46,8 @@ window.addEventListener('load', () => {
 		this.get('#/details/:id', details);
 
 		this.get('#/buy/:id', buyMovieTicket);
+
+		this.get('#/my_movies', getMyMovies);
 	});
 
 	app.run();

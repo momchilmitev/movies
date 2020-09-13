@@ -1,5 +1,11 @@
 import { showInfo, showError } from '../notification.js';
-import { createMovie, getMovies, buyTicket, getMovieById } from '../data.js';
+import {
+	createMovie,
+	getMovies,
+	buyTicket,
+	getMovieById,
+	getMoviesByOwner,
+} from '../data.js';
 
 export default async function catalog() {
 	this.partials = {
@@ -9,9 +15,9 @@ export default async function catalog() {
 	};
 
 	const movies = await getMovies();
-	const context = Object.assign({ movies }, this.app.userData);
+	this.app.userData.movies = movies;
 
-	this.partial('../templates/movie/catalog.hbs', context);
+	this.partial('../templates/movie/catalog.hbs', this.app.userData);
 }
 
 export async function create() {
@@ -89,4 +95,19 @@ export async function buyMovieTicket() {
 		console.log(e);
 		showError(e.message);
 	}
+}
+
+export async function getMyMovies() {
+	this.partials = {
+		header: await this.load('../templates/common/header.hbs'),
+		footer: await this.load('../templates/common/footer.hbs'),
+		movie: await this.load('../templates/movie/movie.hbs'),
+		ownMovie: await this.load('../templates/movie/ownMovie.hbs'),
+	};
+
+	const movies = await getMoviesByOwner();
+	this.app.userData.movies = movies;
+	const context = Object.assign({ myMovies: true }, this.app.userData);
+
+	this.partial('../templates/movie/catalog.hbs', context);
 }

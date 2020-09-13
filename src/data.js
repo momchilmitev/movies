@@ -126,7 +126,8 @@ export async function getMovieById(id) {
 }
 
 // get movies by userId
-export async function getMoviesByOwner(ownerId) {
+export async function getMoviesByOwner() {
+	const ownerId = localStorage.getItem('userId');
 	const url =
 		generateURL(endPoints.MOVIES) + `?where=ownerId%3D%27${ownerId}%27`;
 	const token = localStorage.getItem('userToken');
